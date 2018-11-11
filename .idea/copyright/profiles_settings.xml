@@ -2,6 +2,7 @@
   <settings>
     <module2copyright>
       <element module="gpdgen" copyright="LGPLv3 gpdgen" />
+      <element module="gpdgen-common" copyright="LGPLv3 gpdgen-common" />
     </module2copyright>
   </settings>
 </component>

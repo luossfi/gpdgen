@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="gpdgen-common" pattern="file[group:gpdgen-common]:*//*||file[group:gpdgen-common]:*" />
+</component>
