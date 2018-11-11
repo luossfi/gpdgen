@@ -1,0 +1,127 @@
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+final def currentDate = OffsetDateTime.now()
+final def buildDate = DateTimeFormatter.ISO_LOCAL_DATE.format( currentDate )
+final def buildTime = DateTimeFormatter.ISO_OFFSET_TIME.format( currentDate )
+
+final def commonManifest = manifest {
+  attributes(
+      'Created-By': "${System.getProperty( 'java.version' )} (${System.getProperty( 'java.vendor' )} ${System.getProperty( 'java.vm.version' )})",
+      'Build-Date': buildDate,
+      'Build-Time': buildTime,
+      'Build-Revision': project.gitCommitId,
+      'Implementation-Vendor': 'luossfi.org',
+      'Implementation-Version': project.version,
+      'Implementation-Title': project.description,
+      'Specification-Vendor': 'luossfi.org',
+      'Specification-Version': project.version,
+      'Specification-Title': project.description,
+      'Automatic-Module-Name': project.automaticModuleName )
+}
+
+task sourcesJar( type: Jar ) {
+  group = BasePlugin.BUILD_GROUP
+  description = 'Assembles a jar archive containing the main sources.'
+  from sourceSets.main.allSource
+  classifier = 'sources'
+}
+
+task docsJar( type: Jar ) {
+  group = BasePlugin.BUILD_GROUP
+  description = 'Assembles a jar archive containing the main documentation.'
+  from javadoc.outputs
+  classifier = 'javadoc'
+}
+
+tasks.withType( Jar ) {
+  manifest {
+    from( commonManifest )
+  }
+
+  metaInf {
+    from( rootProject.projectDir ) {
+      include( 'COPYING*' )
+      into( 'licenses' )
+      rename( ~/COPYING($|\..*+)/, 'LICENSE$1' )
+    }
+  }
+}
+
+final def scmUrl = 'https://github.com/luossfi/gpdgen'
+
+publishing {
+  publications {
+    mavenMain( MavenPublication ) {
+      from components.java
+      artifact sourcesJar
+      artifact docsJar
+
+      pom {
+        name = project.name
+        description = project.description
+        url = scmUrl
+        inceptionYear = '2018'
+        licenses {
+          license {
+            name = 'GNU GENERAL PUBLIC LICENSE, Version 3'
+            url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+            distribution = 'repo'
+          }
+          license {
+            name = 'GNU LESSER GENERAL PUBLIC LICENSE, Version 3'
+            url = 'https://www.gnu.org/licenses/lgpl-3.0.txt'
+            distribution = 'repo'
+          }
+        }
+
+        scm {
+          connection = "scm:git:${scmUrl}.git".toString()
+          developerConnection = "scm:git:${scmUrl}.git".toString()
+          url = scmUrl
+        }
+
+        developers {
+          developer {
+            id = 'slukas'
+            name = 'Steff Lukas'
+            email = 'steff.lukas@luossfi.org'
+          }
+        }
+      }
+    }
+  }
+}
+
+if ( !project.hasProperty( 'bintrayUserName' ) )
+{
+  ext.bintrayUserName = ''
+}
+if ( !project.hasProperty( 'bintrayApiKey' ) )
+{
+  ext.bintrayApiKey = ''
+}
+
+bintray {
+  user = bintrayUserName
+  key = bintrayApiKey
+
+  publications = [ 'mavenMain' ]
+
+  pkg {
+    repo = 'org.luossfi'
+    name = project.name
+    desc = project.description
+    licenses = [ 'GPL-3.0', 'LGPL-3.0' ]
+    labels = [ 'gradle', 'gradle plugin descriptor generator' ]
+    vcsUrl = scmUrl
+    githubRepo = 'luossfi/gpdgen'
+
+    version {
+      name = project.version
+    }
+  }
+}

@@ -1,0 +1,67 @@
+/*
+ * This file is part of gpdgen - The Gradle Plugin Descriptor Generator
+ *
+ * Copyright (C) 2018++ Steff Lukas <steff.lukas@luossfi.org>
+ *
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+plugins {
+  id 'com.jfrog.bintray' version '1.8.4' apply false
+  id 'org.ajoberstar.grgit' version '2.3.0' apply false
+}
+
+apply plugin: 'org.ajoberstar.grgit'
+
+ext {
+  gitCommitId = grgit?.head()?.id ?: ''
+}
+
+subprojects {
+  apply plugin: 'java-library'
+  apply plugin: 'groovy'
+  apply plugin: 'checkstyle'
+
+  apply from: "file:$rootDir/gradle/scripts/publishing.gradle"
+
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    checkstyle 'com.puppycrawl.tools:checkstyle:8.14'
+
+    testImplementation 'org.spockframework:spock-core:1.2-groovy-2.4'
+    testRuntimeOnly( 'org.junit.vintage:junit-vintage-engine:5.3.1' ) {
+      exclude group: 'junit'
+    }
+  }
+
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
+
+  tasks.withType( JavaCompile ) {
+    options.encoding = 'UTF-8'
+  }
+
+  test {
+    useJUnitPlatform {
+      includeEngines 'junit-vintage'
+    }
+  }
+}
+
+wrapper {
+  gradleVersion = '4.10.2'
+}
