@@ -117,8 +117,7 @@ bintray {
     desc = project.description
     licenses = [ 'GPL-3.0', 'LGPL-3.0' ]
     labels = [ 'gradle', 'gradle plugin descriptor generator' ]
-    vcsUrl = scmUrl
-    githubRepo = 'luossfi/gpdgen'
+    vcsUrl = "${scmUrl}.git".toString()
 
     version {
       name = project.version
