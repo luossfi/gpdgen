@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="gpdgen-groovy" pattern="file[group:gpdgen-groovy]:*//*||file[group:gpdgen-groovy]:*" />
+</component>

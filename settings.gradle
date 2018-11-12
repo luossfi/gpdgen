@@ -20,3 +20,4 @@
 rootProject.name = 'gpdgen'
 
 include 'gpdgen-common'
+include 'gpdgen-groovy'

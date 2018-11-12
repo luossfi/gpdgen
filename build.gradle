@@ -62,6 +62,15 @@ subprojects {
   }
 }
 
+project( ':gpdgen-groovy' ) {
+  dependencies {
+    api project( ':gpdgen-common' )
+    compileOnly 'org.codehaus.groovy:groovy:2.5.4'
+
+    testImplementation gradleApi()
+  }
+}
+
 wrapper {
   gradleVersion = '4.10.2'
 }

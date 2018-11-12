@@ -3,6 +3,7 @@
     <module2copyright>
       <element module="gpdgen" copyright="LGPLv3 gpdgen" />
       <element module="gpdgen-common" copyright="LGPLv3 gpdgen-common" />
+      <element module="gpdgen-groovy" copyright="LGPLv3 gpdgen-groovy" />
     </module2copyright>
   </settings>
 </component>
