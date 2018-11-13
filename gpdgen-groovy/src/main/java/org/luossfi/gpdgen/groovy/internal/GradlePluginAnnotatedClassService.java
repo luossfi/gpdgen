@@ -226,7 +226,7 @@ public final class GradlePluginAnnotatedClassService
   private String getPrettyGeneratorName()
   {
     final String version = getClass().getPackage().getImplementationVersion();
-    final String prettyVersion = version != null ? " (version: " + version : "";
+    final String prettyVersion = version != null ? String.format( " (version: %s)", version ) : "";
     return generatorName + prettyVersion;
   }
 
