@@ -2,7 +2,7 @@
 :!toc:
 :!prewrap:
 :gradle-docs: https://docs.gradle.org/4.10.2
-:release-version: 0.1.0
+:release-version: 0.1.1
 
 image:https://img.shields.io/badge/release-v{release-version}-blue.svg?style=flat["release v{release-version}"]
 image:https://img.shields.io/badge/license-LGPL--3.0-blue.svg?style=flat["license LGPL-3.0", link="https://www.gnu.org/licenses/lgpl-3.0-standalone.html"]
